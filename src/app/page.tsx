@@ -1,80 +1,65 @@
-'use client';
+import Image from "next/image";
 
-import { useState } from 'react';
-import HeroBanner from '@/components/home/HeroBanner';
-import ActionCards from '@/components/home/ActionCards';
-import PasswordSection from '@/components/home/PasswordSection';
-import QuickActionsCarousel from '@/components/home/QuickActionsCarousel';
-import AnnouncementTicker from '@/components/home/AnnouncementTicker';
-import PopupModal, { type ModalType } from '@/components/home/PopupModal';
-
-export default function HomePage() {
-  const [modal, setModal] = useState<ModalType>(null);
-
-  const handleCardClick = (cardId: string) => {
-    if (cardId === 'kyit') {
-      setModal('automated-services');
-    } else if (cardId === 'domain') {
-      setModal('local-it-support');
-    }
-  };
-
-  const handleQuickAction = (actionId: string) => {
-    if (actionId === 'reset-password') {
-      setModal('out-of-office');
-    }
-  };
-
+export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      {/* Hero Banner */}
-      <HeroBanner />
-
-      {/* Action Cards */}
-      <ActionCards onCardClick={handleCardClick} />
-
-      {/* Password Section */}
-      <PasswordSection
-        onClickHere={() => setModal('out-of-office')}
-        onGuidelinesClick={() => setModal('automated-services')}
-      />
-
-      {/* Quick Actions Carousel */}
-      <QuickActionsCarousel onActionClick={handleQuickAction} />
-
-      {/* Support Info Cards */}
-      <div className="max-w-5xl mx-auto px-6 py-4 grid grid-cols-3 gap-4">
-        <button
-          onClick={() => setModal('out-of-office')}
-          className="bg-white border border-gray-200 rounded-2xl p-5 text-left hover:shadow-md transition-shadow cursor-pointer"
-        >
-          <span className="text-2xl">🏠</span>
-          <h4 className="font-semibold text-gray-800 mt-2 text-sm">Out-of-Office Support</h4>
-          <p className="text-xs text-gray-500 mt-1">Access IT help even when working remotely</p>
-        </button>
-        <button
-          onClick={() => setModal('automated-services')}
-          className="bg-white border border-gray-200 rounded-2xl p-5 text-left hover:shadow-md transition-shadow cursor-pointer"
-        >
-          <span className="text-2xl">🤖</span>
-          <h4 className="font-semibold text-gray-800 mt-2 text-sm">Automated Services</h4>
-          <p className="text-xs text-gray-500 mt-1">Instant self-service for common IT needs</p>
-        </button>
-        <button
-          onClick={() => setModal('local-it-support')}
-          className="bg-white border border-gray-200 rounded-2xl p-5 text-left hover:shadow-md transition-shadow cursor-pointer"
-        >
-          <span className="text-2xl">🧑‍💻</span>
-          <h4 className="font-semibold text-gray-800 mt-2 text-sm">Local IT Support</h4>
-          <p className="text-xs text-gray-500 mt-1">On-site help from your IT team</p>
-        </button>
-      </div>
-
-      {/* Announcement Ticker */}
-      <AnnouncementTicker />
-
-      {/* Popup Modal */}
-      <PopupModal type={modal} onClose={() => setModal(null)} />
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <Image
+          className="dark:invert"
+          src="/next.svg"
+          alt="Next.js logo"
+          width={100}
+          height={20}
+          priority
+        />
+        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
+          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+            To get started, edit the page.tsx file.
+          </h1>
+          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+            Looking for a starting point or more instructions? Head over to{" "}
+            <a
+              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
+            >
+              Templates
+            </a>{" "}
+            or the{" "}
+            <a
+              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
+            >
+              Learning
+            </a>{" "}
+            center.
+          </p>
+        </div>
+        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+          <a
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              className="dark:invert"
+              src="/vercel.svg"
+              alt="Vercel logomark"
+              width={16}
+              height={16}
+            />
+            Deploy Now
+          </a>
+          <a
+            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Documentation
+          </a>
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,0 +1,191 @@
+// Prisma Schema for Sahaayam - Enterprise IT Self-Service Portal
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  EMPLOYEE
+  IT_ADMIN
+  SUPER_ADMIN
+}
+
+enum RequestType {
+  SERVICE
+  INCIDENT
+}
+
+enum RequestStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum RequestPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AnnouncementType {
+  BANNER
+  POPUP
+  TICKER
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id          String   @id @default(cuid())
+  employeeId  String   @unique
+  name        String
+  email       String   @unique
+  password    String
+  role        Role     @default(EMPLOYEE)
+  hostname    String?
+  ipAddress   String?
+  department  String?
+  state       String?
+  city        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  serviceRequests ServiceRequest[]
+  searchLogs      SearchLog[]
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  category    String?
+  iconUrl     String?
+  externalUrl String?
+  isTop       Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model SopDocument {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  fileUrl   String
+  fileType  String
+  category  String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model UsefulLink {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  logoUrl     String?
+  externalUrl String
+  isTop       Boolean  @default(false)
+  category    String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model EscalationTeam {
+  id        String   @id @default(cuid())
+  teamName  String
+  slug      String   @unique
+  isTop     Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  contacts EscalationContact[]
+}
+
+model EscalationContact {
+  id       String @id @default(cuid())
+  teamId   String
+  level    Int
+  name     String
+  landline String?
+  mobile   String?
+  email    String?
+
+  team EscalationTeam @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model LocalItOffice {
+  id           String  @id @default(cuid())
+  state        String
+  city         String
+  locationName String
+  adOuName     String?
+  level        Int
+  name         String
+  landline     String?
+  mobile       String?
+  email        String?
+}
+
+model SapLogonFile {
+  id        String   @id @default(cuid())
+  title     String
+  version   String?
+  fileUrl   String
+  sortOrder Int      @default(0)
+}
+
+model ServiceRequest {
+  id          String          @id @default(cuid())
+  userId      String
+  type        RequestType
+  title       String
+  description String?         @db.Text
+  status      RequestStatus   @default(OPEN)
+  priority    RequestPriority @default(MEDIUM)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Announcement {
+  id        String           @id @default(cuid())
+  title     String
+  content   String           @db.Text
+  type      AnnouncementType
+  isActive  Boolean          @default(true)
+  startDate DateTime
+  endDate   DateTime?
+  createdAt DateTime         @default(now())
+}
+
+model QuickAction {
+  id        String  @id @default(cuid())
+  title     String
+  icon      String?
+  actionUrl String
+  color     String
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+}
+
+model SearchLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  query     String
+  page      String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+}

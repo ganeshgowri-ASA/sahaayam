@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Sahaayam - Enterprise IT Self-Service Portal",
-  description: "Workplace Central - IT Services Catalog",
+  description: "Workplace Central - Enterprise IT Self-Service Portal",
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased font-sans">{children}</body>
     </html>
   );
 }

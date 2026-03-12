@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import SessionProvider from "@/components/providers/SessionProvider";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Sahaayam - Work Place Central",
-  description: "Enterprise IT Self-Service Portal",
+  title: 'Sahaayam – Work Place Central',
+  description: 'Sahaayam IT portal – your one-stop workplace central for IT SOPs, services, policies, and support.',
 };
 
 export default function RootLayout({
@@ -14,9 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
-        <SessionProvider>{children}</SessionProvider>
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

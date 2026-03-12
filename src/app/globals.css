@@ -3,10 +3,6 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --color-gold: #d4a853;
-  --color-navy: #1a1a2e;
-  --color-navy-mid: #16213e;
-  --color-charcoal: #2d2d2d;
 }
 
 @theme inline {
@@ -14,10 +10,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-gold: var(--color-gold);
-  --color-navy: var(--color-navy);
-  --color-navy-mid: var(--color-navy-mid);
-  --color-charcoal: var(--color-charcoal);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -31,14 +23,4 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Hide scrollbar while keeping scroll functionality */
-.scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
 }

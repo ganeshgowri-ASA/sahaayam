@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
-import './globals.css';
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Sahaayam – Work Place Central',
-  description: 'Sahaayam IT portal – your one-stop workplace central for IT SOPs, services, policies, and support.',
+  title: "Sahaayam – IT Support Portal",
+  description: "Your one-stop IT support portal for services, incidents, and knowledge base.",
 };
 
 export default function RootLayout({

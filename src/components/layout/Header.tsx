@@ -13,6 +13,7 @@ const navLinks = [
   { label: 'Useful Links', href: '/useful-links' },
   { label: 'Escalation Matrix', href: '/escalation' },
   { label: 'SAP Logon', href: '/sap-logon' },
+  { label: 'Security', href: '/security' },
 ];
 
 export default function Header() {

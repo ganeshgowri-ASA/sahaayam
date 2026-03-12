@@ -459,10 +459,6 @@ export type ServiceSumOrderByAggregateInput = {
   sortOrder?: Prisma.SortOrder
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number

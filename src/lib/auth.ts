@@ -1,89 +1,93 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
-
-const MOCK_USERS = [
-  {
-    id: "1",
-    employeeId: "admin",
-    passwordHash: bcrypt.hashSync("admin123", 10),
-    name: "Administrator",
-    role: "SUPER_ADMIN",
-  },
-  {
-    id: "2",
-    employeeId: "itadmin",
-    passwordHash: bcrypt.hashSync("itadmin123", 10),
-    name: "IT Administrator",
-    role: "IT_ADMIN",
-  },
-  {
-    id: "3",
-    employeeId: "employee",
-    passwordHash: bcrypt.hashSync("emp123", 10),
-    name: "Employee",
-    role: "EMPLOYEE",
-  },
-];
+import GoogleProvider from "next-auth/providers/google";
+import AzureADProvider from "next-auth/providers/azure-ad";
+import { otpStore } from "@/lib/otp-store";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    // Mobile OTP and Email OTP via CredentialsProvider
     CredentialsProvider({
-      name: "Credentials",
+      id: "otp",
+      name: "OTP",
       credentials: {
-        employeeId: { label: "Employee ID", type: "text" },
-        password: { label: "Password", type: "password" },
+        identifier: { label: "Identifier", type: "text" },
+        otp: { label: "OTP", type: "text" },
+        type: { label: "Type", type: "text" }, // "mobile" | "email"
       },
       async authorize(credentials) {
-        if (!credentials?.employeeId || !credentials?.password) {
+        if (!credentials?.identifier || !credentials?.otp || !credentials?.type) {
           return null;
         }
 
-        const user = MOCK_USERS.find(
-          (u) => u.employeeId === credentials.employeeId
-        );
+        const { identifier, otp, type } = credentials;
+        const valid = otpStore.verify(identifier, otp, type as "mobile" | "email");
 
-        if (!user) {
+        if (!valid) {
           return null;
         }
 
-        const passwordMatch = await bcrypt.compare(
-          credentials.password,
-          user.passwordHash
-        );
-
-        if (!passwordMatch) {
-          return null;
-        }
+        // Auto-create or find user
+        const isEmail = type === "email";
+        const user = {
+          id: Buffer.from(identifier).toString("base64"),
+          name: isEmail ? identifier.split("@")[0] : `User ${identifier.slice(-4)}`,
+          email: isEmail ? identifier : null,
+          mobile: isEmail ? null : identifier,
+          role: "EMPLOYEE",
+        };
 
         return {
           id: user.id,
-          employeeId: user.employeeId,
           name: user.name,
+          email: user.email,
+          mobile: user.mobile,
           role: user.role,
         };
       },
     }),
+
+    // Google OAuth
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "placeholder-google-client-id",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "placeholder-google-client-secret",
+      allowDangerousEmailAccountLinking: true,
+    }),
+
+    // Microsoft / Outlook OAuth
+    AzureADProvider({
+      clientId: process.env.MICROSOFT_CLIENT_ID ?? "placeholder-microsoft-client-id",
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET ?? "placeholder-microsoft-client-secret",
+      tenantId: process.env.MICROSOFT_TENANT_ID ?? "common",
+    }),
   ],
+
   session: {
     strategy: "jwt",
   },
+
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
-        token.employeeId = user.employeeId;
-        token.role = user.role;
+        token.role = (user as { role?: string }).role ?? "EMPLOYEE";
+        token.mobile = (user as { mobile?: string | null }).mobile ?? null;
+      }
+      if (account?.provider === "google" || account?.provider === "azure-ad") {
+        token.role = token.role ?? "EMPLOYEE";
+        token.provider = account.provider;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.employeeId = token.employeeId;
-      session.user.role = token.role;
+      session.user.id = token.id as string;
+      session.user.role = token.role as string;
+      session.user.mobile = (token.mobile as string | null) ?? null;
+      session.user.provider = (token.provider as string | undefined) ?? undefined;
       return session;
     },
   },
+
   pages: {
     signIn: "/login",
   },

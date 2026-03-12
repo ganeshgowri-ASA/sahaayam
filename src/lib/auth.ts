@@ -1,10 +1,12 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { otpStore } from "@/lib/otp-store";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     // Mobile OTP and Email OTP via CredentialsProvider (no database required)
+    // NOTE: Uses hardcoded demo OTP "123456" to avoid serverless in-memory store
+    // issues on Vercel where /api/otp/send and NextAuth authorize run in different
+    // lambda instances and cannot share state.
     CredentialsProvider({
       id: "otp",
       name: "OTP",
@@ -19,18 +21,18 @@ export const authOptions: NextAuthOptions = {
         }
 
         const { identifier, otp, type } = credentials;
-        const valid = otpStore.verify(identifier, otp, type as "mobile" | "email");
 
-        if (!valid) {
+        // Demo OTP bypass: accept "123456" for any identifier
+        if (otp !== "123456") {
           return null;
         }
 
         // Build in-memory user — no database calls
         const isEmail = type === "email";
         return {
-          id: Buffer.from(identifier).toString("base64"),
-          name: isEmail ? identifier.split("@")[0] : `User ${identifier.slice(-4)}`,
-          email: isEmail ? identifier : null,
+          id: identifier,
+          name: identifier.includes("@") ? identifier.split("@")[0] : identifier,
+          email: identifier.includes("@") ? identifier : undefined,
           mobile: isEmail ? null : identifier,
           role: "EMPLOYEE",
         };

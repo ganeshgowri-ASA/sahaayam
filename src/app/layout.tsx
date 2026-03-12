@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = localFont({
-  src: [
-    {
-      path: "./fonts/GeistVF.woff",
-      weight: "100 900",
-    },
-  ],
-  variable: "--font-inter",
-});
-
 export const metadata: Metadata = {
-  title: "Sahaayam - Workplace Central",
-  description: "Your workplace central hub",
+  title: "Sahaayam — Enterprise IT Self-Service Portal",
+  description: "Workplace Central — manage service requests and incidents",
 };
 
 export default function RootLayout({
@@ -24,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.variable}>{children}</body>
+      <body className="antialiased font-sans">{children}</body>
     </html>
   );
 }

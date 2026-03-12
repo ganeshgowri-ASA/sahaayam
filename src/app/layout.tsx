@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import SessionProvider from "@/components/providers/SessionProvider";
 import "./globals.css";
 
-const inter = localFont({
-  src: [
-    {
-      path: "./fonts/GeistVF.woff",
-      weight: "100 900",
-    },
-  ],
-  variable: "--font-inter",
-});
-
 export const metadata: Metadata = {
-  title: "Sahaayam - Workplace Central",
-  description: "Your workplace central hub",
+  title: "Sahaayam - Work Place Central",
+  description: "Enterprise IT Self-Service Portal",
 };
 
 export default function RootLayout({
@@ -24,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.variable}>{children}</body>
+      <body className="antialiased">
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }

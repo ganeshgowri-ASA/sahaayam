@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sahaayam - IT Self-Service Portal",
-  description: "Enterprise IT Self-Service Portal - Workplace Central",
+  title: "Sahaayam — Enterprise IT Self-Service Portal",
+  description: "Workplace Central — manage service requests and incidents",
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased font-sans">{children}</body>
     </html>
   );
 }

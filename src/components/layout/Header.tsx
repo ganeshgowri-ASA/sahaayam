@@ -9,11 +9,13 @@ import MobileMenu from './MobileMenu';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'IT Services', href: '/services' },
+  { label: 'Software', href: '/software' },
   { label: 'IT Tips', href: '/tips' },
   { label: 'Useful Links', href: '/useful-links' },
   { label: 'Escalation Matrix', href: '/escalation' },
   { label: 'SAP Logon', href: '/sap-logon' },
   { label: 'Security', href: '/security' },
+  { label: 'Diagnostics', href: '/diagnostics' },
 ];
 
 export default function Header() {

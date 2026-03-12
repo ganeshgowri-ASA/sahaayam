@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ChatbotGenie from "@/components/shared/ChatbotGenie";
 
 export const metadata: Metadata = {
-  title: "Sahaayam – IT Help Desk",
-  description: "Your one-stop IT support portal",
+  title: "Sahaayam - Enterprise IT Self-Service Portal",
+  description: "Workplace Central - Enterprise IT Self-Service Portal",
 };
 
 export default function RootLayout({
@@ -14,10 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased font-sans">
-        {children}
-        <ChatbotGenie />
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

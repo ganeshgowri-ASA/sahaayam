@@ -13,6 +13,7 @@ const navItems = [
   { label: 'Useful Links', href: '/useful-links' },
   { label: 'Escalation Matrix', href: '/escalation' },
   { label: 'SAP Logon Files', href: '/sap-logon' },
+  { label: 'Security', href: '/security' },
   { label: 'Diagnostics', href: '/diagnostics' },
   { label: 'IT SOPs/DIY', href: '/sops' },
   { label: 'My Requests', href: '/requests' },

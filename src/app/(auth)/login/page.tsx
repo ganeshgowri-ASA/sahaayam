@@ -350,64 +350,14 @@ function EmailOtpTab() {
 
 // ─── Social Login Tab ─────────────────────────────────────────────────────────
 function SocialLoginTab() {
-  const [loading, setLoading] = useState<string | null>(null);
-  const [error, setError] = useState("");
-
-  const handleSocial = async (provider: "google" | "azure-ad") => {
-    setError("");
-    setLoading(provider);
-    try {
-      await signIn(provider, { callbackUrl: "/" });
-    } catch {
-      setError("Failed to initiate sign-in. Please try again.");
-      setLoading(null);
-    }
-  };
-
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-gray-400 text-center pb-2">
-        Sign in with your corporate or personal account
+    <div className="flex flex-col items-center justify-center py-8 space-y-3">
+      <p className="text-lg font-semibold" style={{ color: GOLD }}>
+        Social login coming soon
       </p>
-
-      {/* Google Button */}
-      <button
-        onClick={() => handleSocial("google")}
-        disabled={!!loading}
-        className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg font-semibold text-sm border transition-all disabled:opacity-60 hover:border-yellow-500/60 group"
-        style={{ borderColor: INPUT_BORDER, backgroundColor: INPUT_BG, color: "#e5e7eb" }}
-      >
-        {/* Google icon */}
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
-          <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
-          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-        </svg>
-        {loading === "google" ? "Redirecting..." : "Continue with Google (Gmail)"}
-      </button>
-
-      {/* Microsoft Button */}
-      <button
-        onClick={() => handleSocial("azure-ad")}
-        disabled={!!loading}
-        className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg font-semibold text-sm border transition-all disabled:opacity-60 hover:border-yellow-500/60"
-        style={{ borderColor: INPUT_BORDER, backgroundColor: INPUT_BG, color: "#e5e7eb" }}
-      >
-        {/* Microsoft icon */}
-        <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="0" y="0" width="10" height="10" fill="#F25022"/>
-          <rect x="11" y="0" width="10" height="10" fill="#7FBA00"/>
-          <rect x="0" y="11" width="10" height="10" fill="#00A4EF"/>
-          <rect x="11" y="11" width="10" height="10" fill="#FFB900"/>
-        </svg>
-        {loading === "azure-ad" ? "Redirecting..." : "Continue with Microsoft (Outlook)"}
-      </button>
-
-      {error && <Toast message={error} type="error" />}
-
-      <p className="text-xs text-gray-500 text-center pt-2">
-        Social login requires OAuth app configuration via environment variables.
+      <p className="text-sm text-gray-400 text-center">
+        Google and Microsoft sign-in will be available in a future update.
+        Please use Mobile OTP or Email OTP to sign in.
       </p>
     </div>
   );

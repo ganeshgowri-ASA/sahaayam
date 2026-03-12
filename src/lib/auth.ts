@@ -1,12 +1,10 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import AzureADProvider from "next-auth/providers/azure-ad";
 import { otpStore } from "@/lib/otp-store";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // Mobile OTP and Email OTP via CredentialsProvider
+    // Mobile OTP and Email OTP via CredentialsProvider (no database required)
     CredentialsProvider({
       id: "otp",
       name: "OTP",
@@ -27,38 +25,16 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Auto-create or find user
+        // Build in-memory user — no database calls
         const isEmail = type === "email";
-        const user = {
+        return {
           id: Buffer.from(identifier).toString("base64"),
           name: isEmail ? identifier.split("@")[0] : `User ${identifier.slice(-4)}`,
           email: isEmail ? identifier : null,
           mobile: isEmail ? null : identifier,
           role: "EMPLOYEE",
         };
-
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          mobile: user.mobile,
-          role: user.role,
-        };
       },
-    }),
-
-    // Google OAuth
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "placeholder-google-client-id",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "placeholder-google-client-secret",
-      allowDangerousEmailAccountLinking: true,
-    }),
-
-    // Microsoft / Outlook OAuth
-    AzureADProvider({
-      clientId: process.env.MICROSOFT_CLIENT_ID ?? "placeholder-microsoft-client-id",
-      clientSecret: process.env.MICROSOFT_CLIENT_SECRET ?? "placeholder-microsoft-client-secret",
-      tenantId: process.env.MICROSOFT_TENANT_ID ?? "common",
     }),
   ],
 
@@ -67,15 +43,11 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = (user as { role?: string }).role ?? "EMPLOYEE";
         token.mobile = (user as { mobile?: string | null }).mobile ?? null;
-      }
-      if (account?.provider === "google" || account?.provider === "azure-ad") {
-        token.role = token.role ?? "EMPLOYEE";
-        token.provider = account.provider;
       }
       return token;
     },

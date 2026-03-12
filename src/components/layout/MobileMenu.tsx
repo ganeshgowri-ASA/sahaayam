@@ -8,6 +8,7 @@ import { useSession, signOut } from 'next-auth/react';
 const navItems = [
   { label: 'Home', href: '/' },
   { label: 'IT Services', href: '/services' },
+  { label: 'Software', href: '/software' },
   { label: 'IT Tips', href: '/tips' },
   { label: 'Useful Links', href: '/useful-links' },
   { label: 'Escalation Matrix', href: '/escalation' },
